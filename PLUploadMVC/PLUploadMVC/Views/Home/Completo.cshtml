@@ -1,0 +1,62 @@
+﻿@{
+    ViewBag.Title = "Completo";
+}
+<h2>
+    Completo</h2>
+<link href="@Url.Content("~/Scripts/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css")" rel="stylesheet" type="text/css" />
+<!--Load plupload and all its runtime scripts-->
+<script src="@Url.Content("~/Scripts/plupload/js/plupload.full.js")" type="text/javascript"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js")"></script>
+<script type="text/javascript">
+    // Convert divs to queue widgets when the DOM is ready
+    $(function () {
+        $("#uploader").pluploadQueue({
+            // General settings
+            runtimes: 'flash,silverlight,browserplus,html5',
+
+            max_file_size: '10mb',
+            chunk_size: '1mb',
+            unique_names: true,
+
+            // Resize images on clientside if we can
+            resize: { width: 320, height: 240, quality: 90 },
+
+            // Specify what files to browse for
+            filters: [
+                { title: "Image files", extensions: "jpg,gif,png" },
+                { title: "Zip files", extensions: "zip" }
+            ],
+            url: '@Url.Action("upload", "Home")',
+            flash_swf_url: '../../Scripts/plupload/js/plupload.flash.swf',
+            silverlight_xap_url: '../../Scripts/plupload/js/plupload.silverlight.xap',
+        });
+
+        // Client side form validation
+        $('form').submit(function (e) {
+            var uploader = $('#uploader').pluploadQueue();
+
+            // Files in queue upload them first
+            if (uploader.files.length > 0) {
+                // When all files are uploaded submit form
+                uploader.bind('StateChanged', function () {
+                    if (uploader.files.length === (uploader.total.uploaded + uploader.total.failed)) {
+                        $('form')[0].submit();
+                    }
+                });
+
+                uploader.start();
+            } else {
+                alert('You must queue at least one file.');
+            }
+
+            return false;
+        });
+    });
+</script>
+<div id="uploader">
+    <p>
+       Seu browser não suporta Flash, Silverlight, Gears, BrowserPlus ou HTML5.</p>
+</div>
+<ul>
+    <li>@Html.ActionLink("Voltar", "Index", "Home")</li>
+</ul>

@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Usando o PlUplaod com ASP.NET MVC 4";
+}
+<h2>Escolha um dos exemploas abaixo</h2>
+<ul>
+    <li>@Html.ActionLink("Personalizado", "Personalizado", "Home")</li>
+    <li>@Html.ActionLink("Completo", "Completo", "Home")</li>
+</ul>
+<h2>Listas de Arquivos Enviados</h2>
+<ul>
+    <!-- Recebe uma lista de arquivos do diretorio Content/Uploads e lista-os -->
+    @foreach (var path in ViewBag.Arquivos)
+    {
+        <img src="@Url.Content("~/Content/Uploads/" + path)" alt="" width="250px"/>
+    }
+</ul>
